@@ -1,8 +1,49 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    Layout = "_Layout";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    @using TreatShop.Models;
+    @if (User.Identity.IsAuthenticated)
+    {
+        <h1>Hello @User.Identity.Name! Welcome to Pierre's Sweet and Savory Treats.</h1>
+    }
+    else
+    {
+        <h1>Welcome to Pierre's Sweet and Savory Treats</h1>
+    }
+
+    <h1>List of Available Treats:</h1>
+
+    @if (ViewBag.Treats.Count == 0)
+{
+    <h3>No treats have been added yet.</h3>
+} 
+else
+{
+  <ul>
+    @foreach (Treat treat in ViewBag.Treats)
+    {
+      <li>@Html.ActionLink($"{treat.Description}", "Details", "Treats", new { id = treat.TreatId }, null)</li>
+    }
+  </ul>
+}
+<h1>List of Available Flavors:</h1>
+
+@if (ViewBag.Flavors.Count == 0)
+{
+  <h3>No flavors have been added yet.</h3>
+} 
+else
+{
+  <ul>
+    @foreach (Flavor flavor in ViewBag.Flavors)
+    {
+      <li>@Html.ActionLink($"{flavor.Profile}", "Details", "Flavors", new { id = flavor.FlavorId }, null)</li>
+    }
+  </ul>
+}
+
+
+
 </div>
