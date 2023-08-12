@@ -1,3 +1,3 @@
 {
-  "dotnet.defaultSolution": "TreatShop.Solutions.sln"
+  "dotnet.defaultSolution": "TreatShop/TreatShop.Solutions.sln"
 }

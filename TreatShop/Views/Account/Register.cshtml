@@ -1,0 +1,32 @@
+@{
+    Layout = "_Layout";
+}
+
+@using TreatShop.ViewModels
+@model RegisterViewModel
+
+<h1>Register for an account</h1>
+
+@if(!ViewData.ModelState.IsValid)
+{
+    @Html.ValidationSummary("Please fix the following error(s) and then resubmit the form:")
+}
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post))
+{
+    @Html.LabelFor(user =>user.UserName)
+    @Html.TextBoxFor(user => user.UserName)
+    @Html.LabelFor(user => user.Email)
+    @Html.TextBoxFor(user => user.Email)
+    @Html.LabelFor(user => user.Password)
+    @Html.EditorFor(user => user.Password)
+    @Html.LabelFor(user => user.ConfirmPassword)
+    @Html.EditorFor(user => user.ConfirmPassword)
+
+    <input type="Submit" value="Register">
+}
+<hr>
+
+<@Html.ActionLink("Back to accounts page", "Index")>
+<p>@Html.ActionLink("Back to Home", "Index", "Home")</p>
+</div>

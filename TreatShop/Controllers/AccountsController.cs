@@ -12,7 +12,7 @@ namespace TreatShop.Controllers
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, TreatShopContext db)
+    public AccountsController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, TreatShopContext db)
     {
       _userManager = userManager;
       _signInManager = signInManager;
