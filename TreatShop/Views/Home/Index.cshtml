@@ -15,7 +15,7 @@
 
     <h1>List of Available Treats:</h1>
 
-    @if (ViewBag.Treats.Count == 0)
+    @if (ViewBag.Treats == null || ViewBag.Treats.Count == 0)
 {
     <h3>No treats have been added yet.</h3>
 } 
@@ -30,7 +30,7 @@ else
 }
 <h1>List of Available Flavors:</h1>
 
-@if (ViewBag.Flavors.Count == 0)
+@if (ViewBag.Flavors == null ||ViewBag.Flavors.Count == 0)
 {
   <h3>No flavors have been added yet.</h3>
 } 
@@ -43,7 +43,7 @@ else
     }
   </ul>
 }
+<hr>
+  <p>@Html.ActionLink("Create or manage an account", "Index", "Accounts")</p>
 
 
-
-</div>
