@@ -45,12 +45,12 @@
   {
     <h3> * Click on the flavor to see what treats are available in that flavor *</h3>
 
-    <ul>
+  
       @foreach (Flavor flavor in ViewBag.Flavors)
       {
-        <li>@Html.ActionLink($"{flavor.Profile}", "Details", "Flavors", new { id = flavor.FlavorId }, null)</li>
+        <p>@Html.ActionLink($"{flavor.Profile}", "Details", "Flavors", new { id = flavor.FlavorId }, null)</p>
       }
-    </ul>
+  
   }
   @if (User.Identity.IsAuthenticated)
   {
