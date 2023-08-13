@@ -1,0 +1,24 @@
+@{
+  Layout = "_Layout";
+}
+
+<h1>Add a new treat type</h1>
+
+@model TreatShop.Models.Treat
+
+@if (!ViewData.ModelState.IsValid)
+{
+  @Html.ValidationSummary("Please fix the following error(s) and then resubmit the form:")
+}
+
+@using (Html.BeginForm())
+{
+  @Html.LabelFor(model => model.Description)
+  @Html.TextBoxFor(model => model.Description)
+  <br>
+
+  <input type="submit" value="Add treat type">
+}
+<hr>
+<p>@Html.ActionLink("Back to Main Page", "Index")</p>
+

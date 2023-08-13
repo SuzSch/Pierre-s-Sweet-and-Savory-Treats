@@ -1,9 +1,9 @@
 ﻿@{
   Layout = "_Layout";
 }
+@using TreatShop.Models;
 
 <div class="text-center">
-  @using TreatShop.Models;
   @if (User.Identity.IsAuthenticated)
   {
 
@@ -64,6 +64,6 @@
       <input type="submit" value="Log out @User.Identity.Name" />
     }
   }
-  <p>@Html.ActionLink("Create or manage an account", "Index", "Accounts")</p>
+  <p>@Html.ActionLink("Create or log in to an account", "Index", "Accounts")</p>
 
 
