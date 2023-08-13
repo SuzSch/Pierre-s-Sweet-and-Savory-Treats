@@ -16,19 +16,19 @@
   <hr>
   <h1>List of Available Treats:</h1>
 
-  @if (ViewBag.Treats == null || ViewBag.Treats.Count == 0)
+  @if (Model == null || Model.Count == 0)
   {
     <h3>No treats have been added yet.</h3>
   }
   else
   {
     <h3> * Click on the treat to see what flavors it comes in *</h3>
-    <ul>
-      @foreach (Treat treat in ViewBag.Treats)
+    
+      @foreach (Treat treat in Model)
       {
-        <li>@Html.ActionLink($"{treat.Description}", "Details", "Treats", new { id = treat.TreatId }, null)</li>
+      <p>@Html.ActionLink($"{treat.Description}", "Details", "Treats", new { id = treat.TreatId }, null)</p>
       }
-    </ul>
+    
   }
   @if (User.Identity.IsAuthenticated)
   {

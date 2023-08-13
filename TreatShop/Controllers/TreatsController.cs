@@ -24,13 +24,16 @@ namespace TreatShop.Controllers
 
     public async Task<ActionResult> Index()
     {
+      ViewBag.FlavorId = new SelectList(_db.Flavors, "FlavorId", "Profile");
       string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
       List<Treat> userTreats = _db.Treats
-                          .Where(entry => entry.User.Id == currentUser.Id)
-                          .ToList();
-      return View(userTreats);
+                                .Where(entry => entry.User.Id == currentUser.Id)
+                                .ToList();
+      ViewBag.Title = "Treats List";
+      return View(userTreats); // Pass the userTreats list to the view
     }
+
     public ActionResult Create()
     {
       return View();
