@@ -8,5 +8,6 @@ namespace TreatShop.Models
     public int TreatId { get; set; }
     public string Description { get; set; }
     public List<TreatFlavor> JoinEntites { get; }
+    public ApplicationUser User { get; set; }
   }
 }
