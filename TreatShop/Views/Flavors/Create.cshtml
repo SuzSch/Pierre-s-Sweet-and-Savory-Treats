@@ -1,0 +1,23 @@
+@{
+  Layout = "_Layout";
+}
+
+<h1>Add a new flavor</h1>
+
+@model TreatShop.Models.Flavor
+
+@if (!ViewData.ModelState.IsValid)
+{
+  @Html.ValidationSummary("Please fix the following error(s) and then resubmit the form:")
+}
+
+@using (Html.BeginForm())
+{
+  @Html.LabelFor(model => model.Profile)
+  @Html.TextBoxFor(model => model.Profile)
+  <br>
+
+  <input type="submit" value="Add a flavor profile">
+}
+<hr>
+<p>@Html.ActionLink("Back to Main Page", "Index", "Home")</p>

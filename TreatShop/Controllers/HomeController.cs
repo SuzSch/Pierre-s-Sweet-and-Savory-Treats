@@ -19,8 +19,13 @@ namespace TreatShop.Controllers
         [HttpGet("/")]
         public ActionResult Index()
         {
-             List<Treat> treats = _db.Treats.ToList(); 
-            return View(treats); 
+            List<Treat> treats = _db.Treats.ToList();
+            List<Flavor> flavors = _db.Flavors.ToList();
+
+            ViewBag.Treats = treats;
+            ViewBag.Flavors = flavors;
+
+            return View();
         }
     }
 }

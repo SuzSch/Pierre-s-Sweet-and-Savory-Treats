@@ -31,7 +31,7 @@ namespace TreatShop.Controllers
                                 .Where(entry => entry.User.Id == currentUser.Id)
                                 .ToList();
       ViewBag.Title = "Treats List";
-      return View(userTreats); // Pass the userTreats list to the view
+      return View(userTreats); 
     }
 
     public ActionResult Create()

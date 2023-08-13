@@ -24,16 +24,14 @@ namespace TreatShop.Controllers
 
     public async Task<ActionResult> Index()
     {
+      ViewBag.TreatId = new SelectList(_db.Treats, "TreatId", "Description");
       string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
       List<Flavor> userFlavors = _db.Flavors
-                          .Where(entry => entry.User.Id == currentUser.Id)
-                          .ToList();
+                                .Where(entry => entry.User.Id == currentUser.Id)
+                                .ToList();
+      ViewBag.Title = "Flavors List";
       return View(userFlavors);
-    }
-    public ActionResult Create()
-    {
-      return View();
     }
 
     [HttpPost]
@@ -50,7 +48,7 @@ namespace TreatShop.Controllers
         flavor.User = currentUser;
         _db.Flavors.Add(flavor);
         _db.SaveChanges();
-        return RedirectToAction("Index");
+        return RedirectToAction("Index", "Home");
       }
     }
   }

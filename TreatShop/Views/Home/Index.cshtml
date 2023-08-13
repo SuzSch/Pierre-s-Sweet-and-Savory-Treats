@@ -16,7 +16,7 @@
   <hr>
   <h1>List of Available Treats:</h1>
 
-  @if (Model == null || Model.Count == 0)
+  @if (ViewBag.Treats == null || ViewBag.Treats.Count == 0)
   {
     <h3>No treats have been added yet.</h3>
   }
@@ -24,7 +24,7 @@
   {
     <h3> * Click on the treat to see what flavors it comes in *</h3>
     
-      @foreach (Treat treat in Model)
+      @foreach (Treat treat in ViewBag.Treats)
       {
       <p>@Html.ActionLink($"{treat.Description}", "Details", "Treats", new { id = treat.TreatId }, null)</p>
       }
@@ -32,7 +32,7 @@
   }
   @if (User.Identity.IsAuthenticated)
   {
-    <p>@Html.ActionLink("Add a new treat", "Create", "Treats")</p>
+    <a href="@Url.Action("Create", "Treats")" class="btn btn-primary">Add a new treat</a>
   }
   <hr>
   <h1>List of Available Flavors:</h1>
@@ -54,7 +54,7 @@
   }
   @if (User.Identity.IsAuthenticated)
   {
-    <p>@Html.ActionLink("Add a new flavor", "Create", "Flavors")</p>
+    <a href="@Url.Action("Create", "Flavors")" class="btn btn-primary">Add a new flavor</a>
   }
   <hr>
   @if (User.Identity.IsAuthenticated)
