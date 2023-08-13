@@ -13,9 +13,8 @@
   {
     <h1>Welcome to Pierre's Sweet and Savory Treats</h1>
   }
-<hr>
+  <hr>
   <h1>List of Available Treats:</h1>
-  
 
   @if (ViewBag.Treats == null || ViewBag.Treats.Count == 0)
   {
@@ -30,6 +29,10 @@
         <li>@Html.ActionLink($"{treat.Description}", "Details", "Treats", new { id = treat.TreatId }, null)</li>
       }
     </ul>
+  }
+  @if (User.Identity.IsAuthenticated)
+  {
+    <p>@Html.ActionLink("Add a new treat", "Create", "Treats")</p>
   }
   <hr>
   <h1>List of Available Flavors:</h1>
@@ -48,6 +51,10 @@
         <li>@Html.ActionLink($"{flavor.Profile}", "Details", "Flavors", new { id = flavor.FlavorId }, null)</li>
       }
     </ul>
+  }
+  @if (User.Identity.IsAuthenticated)
+  {
+    <p>@Html.ActionLink("Add a new flavor", "Create", "Flavors")</p>
   }
   <hr>
   @if (User.Identity.IsAuthenticated)
