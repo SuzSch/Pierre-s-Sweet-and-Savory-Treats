@@ -1,0 +1,44 @@
+@{
+  Layout = "_Layout";
+}
+
+@using TreatShop.Models
+@model TreatShop.Models.Treat
+
+  <h1>Treat Details:</h1>
+
+  <h2> @Html.DisplayFor(model => model.Description)</h2>
+      <hr>
+      @if (@Model.JoinEntities.Count == 0)
+      {
+        <p>This treat does not come in any flavors yet!</p>
+      }
+      else
+      {
+        <h4>Available flavors:</h4>
+
+        @foreach (TreatFlavor join in Model.JoinEntities)
+        {
+          <h5>@join.Flavor.Profile
+            @using (Html.BeginForm("DeleteJoin", "Treat"))
+            {
+              @Html.Hidden("joinId", @join.TreatFlavorId)
+              <input type="submit" value="Delete" />
+            }
+          </h5>
+        }
+
+      }
+      @* @using (Html.BeginForm("AddFlavor", "Treats"))
+      {
+        @Html.HiddenFor(model => model.TreatId)
+        @Html.Label("Select an Flavor")
+        @Html.DropDownList("FlavorId")
+
+        <input type="submit" value="Add New Flavor" />
+      } *@
+      <hr>
+      <p>@Html.ActionLink("Back to Main Page", "Index", "Home")</p>
+      <p>@Html.ActionLink("Edit Treat", "Edit", new {id = Model.TreatId})</p>
+      <p>@Html.ActionLink("Delete Treat ", "Delete", new {id = Model.TreatId})</p>
+</div>
