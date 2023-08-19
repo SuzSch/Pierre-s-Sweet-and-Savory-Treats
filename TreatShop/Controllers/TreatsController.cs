@@ -11,7 +11,7 @@ using System.Security.Claims;
 
 namespace TreatShop.Controllers
 {
-  [Authorize]
+
   public class TreatsController : Controller
   {
     private readonly TreatShopContext _db;
@@ -33,13 +33,14 @@ namespace TreatShop.Controllers
       ViewBag.Title = "Treats List";
       return View(userTreats);
     }
-
+    [Authorize]
     public ActionResult Create()
     {
       return View();
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult> Create(Treat treat)
     {
       if (!ModelState.IsValid)
@@ -62,15 +63,27 @@ namespace TreatShop.Controllers
           .Include(treat => treat.JoinEntities)
           .ThenInclude(join => join.Flavor)
           .FirstOrDefault(treat => treat.TreatId == id);
+      ViewBag.FlavorId = new SelectList(_db.Flavors, "FlavorId", "Profile");
       return View(thisTreat);
     }
-
+    [Authorize]
     public async Task<ActionResult> Edit(int id)
     {
       Treat modelTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
 
+      if (modelTreat == null)
+      {
+        return NotFound();
+      }
+
+      if (!User.Identity.IsAuthenticated)
+      {
+        return View("Unauthorized");
+      }
+
       string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+
       if (currentUser == modelTreat.User)
       {
         return View(modelTreat);
@@ -81,7 +94,9 @@ namespace TreatShop.Controllers
       }
     }
 
+
     [HttpPost]
+    [Authorize]
     public ActionResult Edit(Treat treat)
     {
       if (!ModelState.IsValid)
@@ -94,7 +109,51 @@ namespace TreatShop.Controllers
         _db.SaveChanges();
         return RedirectToAction("Details", new { id = treat.TreatId });
       }
-      return RedirectToAction("Index");
+      return RedirectToAction("Index", "Home");
+    }
+
+
+    [HttpPost]
+    [Authorize]
+    public ActionResult AddFlavor(Treat treat, int flavorId)
+    {
+      if (!User.Identity.IsAuthenticated)
+      {
+        return View("Unauthorized");
+      }
+#nullable enable
+      TreatFlavor? joinEntity = _db.TreatFlavors.FirstOrDefault(join => (join.FlavorId == flavorId && join.TreatId == treat.TreatId));
+#nullable disable
+      if (joinEntity == null && flavorId != 0)
+      {
+        _db.TreatFlavors.Add(new TreatFlavor() { FlavorId = flavorId, TreatId = treat.TreatId });
+        _db.SaveChanges();
+      }
+      return RedirectToAction("Details", new { id = treat.TreatId });
+    }
+    [Authorize]
+    public async Task<ActionResult> Delete(int id)
+    {
+      Treat thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
+      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+      if (currentUser == thisTreat.User)
+      {
+        return View(thisTreat);
+      }
+      else
+      {
+        return RedirectToAction("Unauthorized");
+      }
+    }
+
+    [HttpPost, ActionName("Delete")]
+    public ActionResult DeleteConfirmed(int id)
+    {
+      Treat thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
+      _db.Treats.Remove(thisTreat);
+      _db.SaveChanges();
+      return RedirectToAction("Index", "Home");
     }
 
   }

@@ -1,0 +1,17 @@
+@{
+  Layout = "_Layout";
+}
+
+@model TreatShop.Models.Treat
+
+<h1>Delete Treat</h1>
+<p>Are you sure you want to delete the following treat?</p>
+<div>
+  <h4>Treat details:</h4>
+  <div>
+    <h5>Description: @Html.DisplayFor(model => model.Description)</h5>
+  </div>
+  <form asp-action="Delete" asp-route-id="@Model.TreatId" method="post">
+    <button type="submit" class="btn btn-danger">Delete</button>
+  </form>
+</div>
