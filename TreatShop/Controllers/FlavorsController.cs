@@ -63,5 +63,37 @@ namespace TreatShop.Controllers
           .FirstOrDefault(flavor => flavor.FlavorId == id);
       return View(thisFlavor);
     }
+
+    public async Task<ActionResult> Edit(int id)
+    {
+      Flavor modelFlavor = _db.Flavors.FirstOrDefault(flavor => flavor.FlavorId == id);
+
+      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+      if (currentUser == modelFlavor.User)
+      {
+        return View(modelFlavor);
+      }
+      else
+      {
+        return RedirectToAction("Accounts", "Index");
+      }
+    }
+
+    [HttpPost]
+    public ActionResult Edit(Flavor flavor)
+    {
+      if (!ModelState.IsValid)
+      {
+        return View(flavor);
+      }
+      else
+      {
+        _db.Flavors.Update(flavor);
+        _db.SaveChanges();
+        return RedirectToAction("Details", new { id = flavor.FlavorId });
+      }
+      return RedirectToAction("Index");
+    }
   }
 }

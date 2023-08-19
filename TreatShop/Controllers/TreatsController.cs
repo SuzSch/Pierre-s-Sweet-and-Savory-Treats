@@ -31,7 +31,7 @@ namespace TreatShop.Controllers
                                 .Where(entry => entry.User.Id == currentUser.Id)
                                 .ToList();
       ViewBag.Title = "Treats List";
-      return View(userTreats); 
+      return View(userTreats);
     }
 
     public ActionResult Create()
@@ -64,5 +64,38 @@ namespace TreatShop.Controllers
           .FirstOrDefault(treat => treat.TreatId == id);
       return View(thisTreat);
     }
+
+    public async Task<ActionResult> Edit(int id)
+    {
+      Treat modelTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
+
+      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+      if (currentUser == modelTreat.User)
+      {
+        return View(modelTreat);
+      }
+      else
+      {
+        return RedirectToAction("Accounts", "Index");
+      }
+    }
+
+    [HttpPost]
+    public ActionResult Edit(Treat treat)
+    {
+      if (!ModelState.IsValid)
+      {
+        return View(treat);
+      }
+      else
+      {
+        _db.Treats.Update(treat);
+        _db.SaveChanges();
+        return RedirectToAction("Details", new { id = treat.TreatId });
+      }
+      return RedirectToAction("Index");
+    }
+
   }
 }

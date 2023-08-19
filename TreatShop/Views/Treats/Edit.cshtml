@@ -1,0 +1,28 @@
+@{
+  Layout = "_Layout";
+}
+
+@model TreatShop.Models.Treat
+
+<h2>Edit</h2>
+
+<h4>Edit this treat: @Html.DisplayFor(model => model.Description)</h4>
+
+@if (!ViewData.ModelState.IsValid)
+{
+  @Html.ValidationSummary("Please fix the following error(s) and then resubmit the form:")
+
+}
+
+@using (Html.BeginForm())
+{
+  @Html.HiddenFor(model => model.TreatId)
+
+  @Html.LabelFor(model => model.Description)
+  @Html.EditorFor(model => model.Description)
+
+
+  <input type="submit" value="Save" />
+}
+
+<p>@Html.ActionLink("Back to home page", "Index")</p>

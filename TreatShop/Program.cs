@@ -6,43 +6,45 @@ using Microsoft.AspNetCore.Identity;
 
 namespace TreatShop
 {
-    class Program
+  class Program
+  {
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
 
-            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+      WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllersWithViews();
+      builder.Services.AddControllersWithViews();
+      builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/Accounts/Login");
 
-            builder.Services.AddDbContext<TreatShopContext>(
+
+      builder.Services.AddDbContext<TreatShopContext>(
                               dbContextOptions => dbContextOptions
                                 .UseMySql(
                                   builder.Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(builder.Configuration["ConnectionStrings:DefaultConnection"]
                                 )
                               )
                             );
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-                    .AddEntityFrameworkStores<TreatShopContext>()
-                    .AddDefaultTokenProviders();
+      builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+              .AddEntityFrameworkStores<TreatShopContext>()
+              .AddDefaultTokenProviders();
 
-            WebApplication app = builder.Build();
+      WebApplication app = builder.Build();
 
-            // app.UseDeveloperExceptionPage();
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
+      // app.UseDeveloperExceptionPage();
+      app.UseHttpsRedirection();
+      app.UseStaticFiles();
 
-            app.UseRouting();
+      app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+      app.UseAuthentication();
+      app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}"
-              );
+      app.MapControllerRoute(
+          name: "default",
+          pattern: "{controller=Home}/{action=Index}/{id?}"
+        );
 
-            app.Run();
-        }
+      app.Run();
     }
+  }
 }
