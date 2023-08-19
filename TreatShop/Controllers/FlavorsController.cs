@@ -11,7 +11,7 @@ using System.Security.Claims;
 
 namespace TreatShop.Controllers
 {
-  [Authorize]
+  
   public class FlavorsController : Controller
   {
     private readonly TreatShopContext _db;
@@ -30,15 +30,16 @@ namespace TreatShop.Controllers
       List<Flavor> userFlavors = _db.Flavors
                                 .Where(entry => entry.User.Id == currentUser.Id)
                                 .ToList();
-      ViewBag.Title = "Flavors List";
       return View(userFlavors);
     }
+    [Authorize]
     public ActionResult Create()
     {
       return View();
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult> Create(Flavor flavor)
     {
       if (!ModelState.IsValid)
@@ -61,39 +62,52 @@ namespace TreatShop.Controllers
           .Include(flavor => flavor.JoinEntities)
           .ThenInclude(join => join.Treat)
           .FirstOrDefault(flavor => flavor.FlavorId == id);
+      ViewBag.TreatId = new SelectList(_db.Treats, "TreatId", "Description");
+
       return View(thisFlavor);
     }
 
-    public async Task<ActionResult> Edit(int id)
+    [HttpPost]
+    [Authorize]
+    public ActionResult AddTreat(Flavor flavor, int treatId)
     {
-      Flavor modelFlavor = _db.Flavors.FirstOrDefault(flavor => flavor.FlavorId == id);
+      if (!User.Identity.IsAuthenticated)
+      {
+        return View("Unauthorized");
+      }
+      #nullable enable
+      TreatFlavor? joinEntity = _db.TreatFlavors.FirstOrDefault(join => (join.TreatId == treatId && join.FlavorId == flavor.FlavorId));
+      #nullable disable
+      if (joinEntity == null && treatId != 0)
+      {
+        _db.TreatFlavors.Add(new TreatFlavor() { TreatId = treatId, FlavorId = flavor.FlavorId });
+        _db.SaveChanges();
+      }
+      return RedirectToAction("Details", new { id = flavor.FlavorId });
+    }
 
+    public async Task<ActionResult> Delete(int id)
+    {
+      Flavor thisFlavor = _db.Flavors.FirstOrDefault(flavor => flavor.FlavorId == id);
       string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
-      if (currentUser == modelFlavor.User)
+      if (currentUser == thisFlavor.User)
       {
-        return View(modelFlavor);
+        return View(thisFlavor);
       }
       else
       {
-        return RedirectToAction("Accounts", "Index");
+        return RedirectToAction("Unauthorized");
       }
     }
 
-    [HttpPost]
-    public ActionResult Edit(Flavor flavor)
+    [HttpPost, ActionName("Delete")]
+    public ActionResult DeleteConfirmed(int id)
     {
-      if (!ModelState.IsValid)
-      {
-        return View(flavor);
-      }
-      else
-      {
-        _db.Flavors.Update(flavor);
-        _db.SaveChanges();
-        return RedirectToAction("Details", new { id = flavor.FlavorId });
-      }
-      return RedirectToAction("Index");
+      Flavor thisFlavor = _db.Flavors.FirstOrDefault(flavor => flavor.FlavorId == id);
+      _db.Flavors.Remove(thisFlavor);
+      _db.SaveChanges();
+      return RedirectToAction("Index", "Home");
     }
   }
 }

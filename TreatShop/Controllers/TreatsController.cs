@@ -30,7 +30,6 @@ namespace TreatShop.Controllers
       List<Treat> userTreats = _db.Treats
                                 .Where(entry => entry.User.Id == currentUser.Id)
                                 .ToList();
-      ViewBag.Title = "Treats List";
       return View(userTreats);
     }
     [Authorize]
