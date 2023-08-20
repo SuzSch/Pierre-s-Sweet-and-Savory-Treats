@@ -142,7 +142,7 @@ namespace TreatShop.Controllers
       }
       else
       {
-        return RedirectToAction("Unauthorized");
+        return View("Unauthorized");
       }
     }
 
